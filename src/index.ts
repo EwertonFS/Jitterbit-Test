@@ -25,7 +25,17 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.json({ message: 'API de Pedidos', status: 'Online' })
+    res.json({
+        message: 'API de Pedidos - Desafio Jitterbit (src3)',
+        status: 'Online',
+        endpoints: [
+            'POST /api/order - Criar pedido',
+            'GET /api/order - Listar pedidos',
+            'GET /api/order/:orderId - Buscar pedido',
+            'PUT /api/order/:orderId - Atualizar pedido',
+            'DELETE /api/order/:orderId - Deletar pedido'
+        ]
+    })
 })
 
 app.use('/api', orderRoutes.router)

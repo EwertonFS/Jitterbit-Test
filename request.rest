@@ -7,7 +7,7 @@
 # ==============================================================================
 @baseUrl = http://localhost:3000
 @contentType = application/json
-@orderId =PED-2024-001
+@orderId = PED-2024-001
 
 # ==============================================================================
 # CABEÇALHOS PADRÃO
@@ -31,7 +31,7 @@ Content-Type: {{contentType}}
 Accept: {{accept}}
 
 {
-  "numeroPedido": "PED-2024-003",
+  "numeroPedido": "PED-2024-004",
   "valorTotal": 150.00,
   "dataCriacao": "2024-01-15T10:30:00Z",
   "items": [
@@ -152,3 +152,53 @@ Accept: {{accept}}
 DELETE {{baseUrl}}/api/order/999999
 Accept: {{accept}}
 
+
+
+
+# ==============================================================================
+# SEÇÃO 6: TESTES DE ERRO E CASOS EXTREMO
+# ==============================================================================
+###
+# @name createOrder_ValidationError
+# @description Testa criação com dados inválidos (edge case)
+POST {{baseUrl}}/api/order
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "",
+    "valorTotal": -100.00,
+    "dataCriacao": "not-a-date",
+    "items": []
+}
+
+###
+
+# @name createOrder_MissingFields
+# @description Testa criação com campos obrigatórios ausentes (edge case)
+POST {{baseUrl}}/api/order
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "PED-TEST"
+}
+
+###
+
+# @name methodNotAllowed
+# @description Testa método HTTP não permitido (edge case)
+PATCH {{baseUrl}}/api/order
+Accept: {{accept}}
+
+###
+
+# @name invalidJson
+# @description Testa envio de JSON malformado (edge case)
+POST {{baseUrl}}/api/order
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "TEST"
+}

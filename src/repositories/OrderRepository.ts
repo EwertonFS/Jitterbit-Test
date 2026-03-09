@@ -1,7 +1,7 @@
 
 import { PrismaClient } from '../database/client'
 import { IOrderRepository } from '../interfaces/IOrderRepository'
-import { CreateOrderInput, OrderResponse } from '../types/OrderTypes'
+import { CreateOrderInput, OrderResponse, ItemResponse } from '../types/OrderTypes'
 
 export class OrderRepository implements IOrderRepository {
     private prisma: PrismaClient
@@ -27,16 +27,7 @@ export class OrderRepository implements IOrderRepository {
             include: { items: true },
         })
 
-        return {
-            orderId: order.orderId,
-            value: Number(order.value),
-            creationDate: order.creationDate.toISOString(),
-            items: order.items.map((item) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: Number(item.price),
-            })),
-        }
+        return this.mapToOrderResponse(order)
     }
 
     async findById(orderId: string): Promise<OrderResponse | null> {
@@ -51,16 +42,8 @@ export class OrderRepository implements IOrderRepository {
             return null
         }
 
-        return {
-            orderId: order.orderId,
-            value: Number(order.value),
-            creationDate: order.creationDate.toISOString(),
-            items: order.items.map((item) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: Number(item.price),
-            })),
-        }
+        return this.mapToOrderResponse(order)
+
     }
 
     async findAll(): Promise<OrderResponse[]> {
@@ -70,16 +53,7 @@ export class OrderRepository implements IOrderRepository {
             },
         })
 
-        return orders.map((order) => ({
-            orderId: order.orderId,
-            value: Number(order.value),
-            creationDate: order.creationDate.toISOString(),
-            items: order.items.map((item) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: Number(item.price),
-            })),
-        }))
+        return orders.map((order: any) => this.mapToOrderResponse(order))
     }
 
 
@@ -111,16 +85,7 @@ export class OrderRepository implements IOrderRepository {
             },
         })
 
-        return {
-            orderId: order.orderId,
-            value: Number(order.value),
-            creationDate: order.creationDate.toISOString(),
-            items: order.items.map((item) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: Number(item.price),
-            })),
-        }
+        return this.mapToOrderResponse(order)
     }
 
     async delete(orderId: string): Promise<boolean> {
@@ -145,6 +110,22 @@ export class OrderRepository implements IOrderRepository {
             select: { orderId: true },
         })
         return order !== null
+    }
+
+    /**
+    * Método privado para mapear dados do banco para o formato de resposta
+    */
+    private mapToOrderResponse(order: any): OrderResponse {
+        return {
+            orderId: order.orderId,
+            value: Number(order.value),
+            creationDate: order.creationDate.toISOString(),
+            items: order.items.map((item: any): ItemResponse => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: Number(item.price),
+            })),
+        }
     }
 
 
