@@ -31,7 +31,7 @@ Content-Type: {{contentType}}
 Accept: {{accept}}
 
 {
-  "numeroPedido": "PED-2024-004",
+  "numeroPedido": "PED-2024-005",
   "valorTotal": 150.00,
   "dataCriacao": "2024-01-15T10:30:00Z",
   "items": [
@@ -219,6 +219,7 @@ Accept: {{accept}}
 # ==============================================================================
 # ETAPA 1: CRIAR PEDIDO
 # ==============================================================================
+###
 # @name createOrder_Flow
 # @description Etapa 1 do fluxo - Cria um novo pedido
 # @response Success: Retorna o pedido criado com status 201
@@ -243,6 +244,7 @@ Accept: {{accept}}
 # ==============================================================================
 # ETAPA 2: CONSULTAR PEDIDO CRIADO
 # ==============================================================================
+###
 # @name getOrder_Flow
 # @description Etapa 2 do fluxo - Consulta o pedido criado na etapa anterior
 # @response Success: Retorna os dados do pedido com status 200

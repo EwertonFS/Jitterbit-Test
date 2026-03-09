@@ -1,5 +1,5 @@
 
-import { PrismaClient } from '../database/client'
+import { PrismaClient } from '@prisma/client'
 import { IOrderRepository } from '../interfaces/IOrderRepository'
 import { CreateOrderInput, OrderResponse, ItemResponse } from '../types/OrderTypes'
 
