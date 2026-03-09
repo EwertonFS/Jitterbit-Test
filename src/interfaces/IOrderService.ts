@@ -12,5 +12,5 @@ import { OrderResponse } from '../types/OrderTypes'
 export interface IOrderService {
     create(input: unknown): Promise<{ success: boolean; data?: OrderResponse; errors?: string[] }>
     findById(orderId: string): Promise<{ success: boolean; data?: OrderResponse; error?: string }>
-
+    update(orderId: string, input: unknown): Promise<{ success: boolean; data?: OrderResponse; errors?: string[]; error?: string }>
 }

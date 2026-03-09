@@ -62,4 +62,33 @@ export class OrderController {
             )
         }
     }
+
+
+    async update(request: Request, response: Response): Promise<Response> {
+        try {
+            const { orderId } = request.params
+            const body = request.body
+            const result = await this.orderService.update(orderId as string, body)
+
+            if (!result.success) {
+                const status = result.error ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST
+                return response.status(status).json(
+                    new ErrorResponse(
+                        result.error ? 'Not Found' : 'Bad Request',
+                        result.error || result.errors?.join(', ') || 'Erro na validação',
+                        status
+                    )
+                )
+            }
+
+            return response.status(HttpStatus.OK).json(
+                new SuccessResponse(result.data!, 'Pedido atualizado com sucesso', HttpStatus.OK)
+            )
+        } catch (error) {
+            console.error('Erro ao atualizar pedido:', error)
+            return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+                new ErrorResponse('Internal Server Error', 'Erro ao atualizar pedido', HttpStatus.INTERNAL_SERVER_ERROR)
+            )
+        }
+    }
 }

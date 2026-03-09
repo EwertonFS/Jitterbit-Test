@@ -56,3 +56,33 @@ Accept: {{accept}}
 GET {{baseUrl}}/api/order/{{orderId}}
 Accept: {{accept}}
 
+
+
+# ==============================================================================
+# SEÇÃO 4: ATUALIZAÇÃO DE PEDIDOS
+# ==============================================================================
+####
+# @name updateOrder
+# @description Atualiza um pedido existente
+# @param orderId - ID do pedido a ser atualizado
+PUT {{baseUrl}}/api/order/{{orderId}}
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "PED-2026-001-UPDATED",
+    "valorTotal": 200.00,
+    "dataCriacao": "2026-03-08T12:00:00Z",
+    "items": [
+        {
+            "idItem": 1,
+            "quantidadeItem": 3,
+            "valorItem": 50.00
+        },
+        {
+            "idItem": 3,
+            "quantidadeItem": 1,
+            "valorItem": 50.00
+        }
+    ]
+}
