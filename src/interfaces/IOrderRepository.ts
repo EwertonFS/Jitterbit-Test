@@ -1,0 +1,15 @@
+/**
+ * Interfaces - Contratos para Injeção de Dependência
+ * Desafio Jitterbit - src3
+ */
+
+import { CreateOrderInput, OrderResponse } from '../types/OrderTypes'
+
+/**
+ * Interface para Repository de Orders
+ * Abstrai a implementação do banco de dados
+ */
+export interface IOrderRepository {
+    create(input: CreateOrderInput): Promise<OrderResponse>
+
+}

@@ -28,3 +28,32 @@ export class SuccessResponse<T> {
         this.statusCode = statusCode;
     }
 }
+
+
+
+export interface CreateOrderInput {
+    numeroPedido: string
+    valorTotal: number
+    dataCriacao: string
+    items: ItemInput[]
+}
+
+export interface ItemInput {
+    idItem: string
+    quantidadeItem: number
+    valorItem: number
+}
+
+export interface OrderResponse {
+    orderId: string
+    value: number
+    creationDate: string
+    items: ItemResponse[]
+}
+
+// Interface de item na resposta da API
+export interface ItemResponse {
+    productId: number
+    quantity: number
+    price: number
+}
