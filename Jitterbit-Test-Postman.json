@@ -1,0 +1,455 @@
+{
+    "info": {
+        "name": "Jitterbit Test API",
+        "description": "Collection for testing the Order API deployed on Render",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "https://jitterbit-test.onrender.com",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "{{baseUrl}}/",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        ""
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "SEÇÃO 2: Criar Pedido",
+            "item": [
+                {
+                    "name": "Criar Pedido",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"numeroPedido\": \"PED-2024-001\",\n  \"valorTotal\": 150.00,\n  \"dataCriacao\": \"2024-01-15T10:30:00Z\",\n  \"items\": [\n    {\n      \"idItem\": \"1\",\n      \"quantidadeItem\": 2,\n      \"valorItem\": 50.00\n    },\n    {\n      \"idItem\": \"2\",\n      \"quantidadeItem\": 1,\n      \"valorItem\": 50.00\n    }\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Criar Pedido - Erro Validação",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"numeroPedido\": \"\",\n    \"valorTotal\": -100.00,\n    \"dataCriacao\": \"not-a-date\",\n    \"items\": []\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SEÇÃO 3: Consulta de Pedidos",
+            "item": [
+                {
+                    "name": "Listar Todos os Pedidos",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Cache-Control",
+                                "value": "no-cache"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Buscar Pedido por ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-2024-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-2024-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Buscar Pedido - Não Encontrado",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/999999",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "999999"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SEÇÃO 4: Atualização de Pedidos",
+            "item": [
+                {
+                    "name": "Atualizar Pedido",
+                    "request": {
+                        "method": "PUT",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-2024-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-2024-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"numeroPedido\": \"PED-2026-001-UPDATED\",\n    \"valorTotal\": 200.00,\n    \"dataCriacao\": \"2026-03-08T12:00:00Z\",\n    \"items\": [\n        {\n            \"idItem\": 1,\n            \"quantidadeItem\": 3,\n            \"valorItem\": 50.00\n        },\n        {\n            \"idItem\": 3,\n            \"quantidadeItem\": 1,\n            \"valorItem\": 50.00\n        }\n    ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Atualizar Pedido - Não Encontrado",
+                    "request": {
+                        "method": "PUT",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/999999",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "999999"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"numeroPedido\": \"PED-TEST\",\n    \"valorTotal\": 100.00,\n    \"dataCriacao\": \"2026-03-08T10:00:00Z\",\n    \"items\": []\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SEÇÃO 5: Exclusão de Pedidos",
+            "item": [
+                {
+                    "name": "Deletar Pedido",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-2024-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-2024-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Deletar Pedido - Não Encontrado",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/999999",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "999999"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SEÇÃO 7: Fluxo Completo de Teste",
+            "item": [
+                {
+                    "name": "1. Criar Pedido (Fluxo)",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"numeroPedido\": \"PED-FLOW-001\",\n  \"valorTotal\": 500.00,\n  \"dataCriacao\": \"2026-03-09T10:00:00Z\",\n  \"items\": [\n    {\n      \"idItem\": \"1\",\n      \"quantidadeItem\": 5,\n      \"valorItem\": 100.00\n    }\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "2. Consultar Pedido Criado",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-FLOW-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-FLOW-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "3. Atualizar Pedido",
+                    "request": {
+                        "method": "PUT",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-FLOW-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-FLOW-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"numeroPedido\": \"PED-FLOW-001-UPDATED\",\n    \"valorTotal\": 750.00,\n    \"dataCriacao\": \"2026-03-09T12:00:00Z\",\n    \"items\": [\n        {\n            \"idItem\": \"1\",\n            \"quantidadeItem\": 5,\n            \"valorItem\": 100.00\n        },\n        {\n            \"idItem\": \"2\",\n            \"quantidadeItem\": 5,\n            \"valorItem\": 50.00\n        }\n    ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "4. Consultar Pedido Atualizado",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-FLOW-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-FLOW-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "5. Deletar Pedido",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-FLOW-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-FLOW-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "6. Verificar Deleção",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/order/PED-FLOW-001",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "order",
+                                "PED-FLOW-001"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
