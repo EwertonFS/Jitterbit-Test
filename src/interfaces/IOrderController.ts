@@ -10,5 +10,7 @@
 export interface IOrderController {
     create(request: any, response: any): Promise<any>
     findById(request: any, response: any): Promise<any>
+    findAll(request: any, response: any): Promise<any>
     update(request: any, response: any): Promise<any>
+    delete(request: any, response: any): Promise<any>
 }

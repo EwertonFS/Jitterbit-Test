@@ -48,7 +48,18 @@ Accept: {{accept}}
   ]
 }
 
-### 
+SEÇÃO 3: CONSULTA DE PEDIDOS
+# ==============================================================================
+###
+
+# @name listAllOrders
+# @description Lista todos os pedidos cadastrados
+# @response Success: Returns array of orders
+GET {{baseUrl}}/api/order
+Accept: {{accept}}
+Cache-Control: {{cache-control}}
+
+###
 
 # @name getOrderById
 # @description Busca um pedido específico pelo ID
@@ -56,7 +67,12 @@ Accept: {{accept}}
 GET {{baseUrl}}/api/order/{{orderId}}
 Accept: {{accept}}
 
+###
 
+# @name getOrderById_NotFound
+# @description Testa cenário de pedido não encontrado (edge case)
+GET {{baseUrl}}/api/order/999999
+Accept: {{accept}}
 
 # ==============================================================================
 # SEÇÃO 4: ATUALIZAÇÃO DE PEDIDOS
@@ -86,3 +102,52 @@ Accept: {{accept}}
         }
     ]
 }
+
+###
+
+# @name updateOrder_NotFound
+# @description Testa cenário de atualização de pedido inexistente (edge case)
+PUT {{baseUrl}}/api/order/999999
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "PED-TEST",
+    "valorTotal": 100.00,
+    "dataCriacao": "2026-03-08T10:00:00Z",
+    "items": []
+}
+
+###
+
+# @name updateOrder_ValidationError
+# @description Testa cenário de validação com dados inválidos (edge case)
+PUT {{baseUrl}}/api/order/{{orderId}}
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "",
+    "valorTotal": -50.00,
+    "dataCriacao": "invalid-date",
+    "items": []
+}
+
+# ==============================================================================
+# SEÇÃO 5: EXCLUSÃO DE PEDIDOS
+# ==============================================================================
+###
+
+# @name deleteOrder
+# @description Deleta um pedido existente
+# @param orderId - ID do pedido a ser deletado
+DELETE {{baseUrl}}/api/order/{{orderId}}
+Accept: {{accept}}
+
+###
+
+# @name deleteOrder_NotFound
+# @description Testa cenário de exclusão de pedido inexistente (edge case)
+DELETE {{baseUrl}}/api/order/999999
+Accept: {{accept}}
+

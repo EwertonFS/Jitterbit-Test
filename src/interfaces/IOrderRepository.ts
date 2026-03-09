@@ -12,6 +12,9 @@ import { CreateOrderInput, OrderResponse } from '../types/OrderTypes'
 export interface IOrderRepository {
     create(input: CreateOrderInput): Promise<OrderResponse>
     findById(orderId: string): Promise<OrderResponse | null>
+    findAll(): Promise<OrderResponse[]>
     update(orderId: string, input: CreateOrderInput): Promise<OrderResponse | null>
+    delete(orderId: string): Promise<boolean>
+
 
 }

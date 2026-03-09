@@ -77,6 +77,13 @@ export class OrderService implements IOrderService {
     }
 
 
+    async findAll(): Promise<{ success: boolean; data: OrderResponse[] }> {
+        const orders = await this.orderRepository.findAll()
+        return { success: true, data: orders }
+    }
+
+
+
     async update(orderId: string, input: unknown): Promise<{ success: boolean; data?: OrderResponse; errors?: string[]; error?: string }> {
         if (!orderId) {
             return { success: false, error: 'ID do pedido é obrigatório' }
@@ -98,6 +105,20 @@ export class OrderService implements IOrderService {
         }
 
         return { success: true, data: updatedOrder }
+    }
+
+    async delete(orderId: string): Promise<{ success: boolean; error?: string }> {
+        if (!orderId) {
+            return { success: false, error: 'ID do pedido é obrigatório' }
+        }
+
+        const deleted = await this.orderRepository.delete(orderId)
+
+        if (!deleted) {
+            return { success: false, error: `Pedido com ID ${orderId} não encontrado` }
+        }
+
+        return { success: true }
     }
 
 

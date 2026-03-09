@@ -13,7 +13,9 @@ export class OrderRoutes {
 
     private routes(): void {
         this.router.post('/order', (req, res) => this.orderController.create(req, res))
+        this.router.get('/order', (req, res) => this.orderController.findAll(req, res))
         this.router.get('/order/:orderId', (req, res) => this.orderController.findById(req, res))
         this.router.put('/order/:orderId', (req, res) => this.orderController.update(req, res))
+        this.router.delete('/order/:orderId', (req, res) => this.orderController.delete(req, res))
     }
 }

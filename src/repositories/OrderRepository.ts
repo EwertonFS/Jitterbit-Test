@@ -63,6 +63,25 @@ export class OrderRepository implements IOrderRepository {
         }
     }
 
+    async findAll(): Promise<OrderResponse[]> {
+        const orders = await this.prisma.order.findMany({
+            include: {
+                items: true,
+            },
+        })
+
+        return orders.map((order) => ({
+            orderId: order.orderId,
+            value: Number(order.value),
+            creationDate: order.creationDate.toISOString(),
+            items: order.items.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: Number(item.price),
+            })),
+        }))
+    }
+
 
     async update(orderId: string, input: CreateOrderInput): Promise<OrderResponse | null> {
         const existingOrder = await this.prisma.order.findUnique({
@@ -103,5 +122,24 @@ export class OrderRepository implements IOrderRepository {
             })),
         }
     }
+
+    async delete(orderId: string): Promise<boolean> {
+        const existingOrder = await this.prisma.order.findUnique({
+            where: { orderId },
+        })
+
+        if (!existingOrder) {
+            return false
+        }
+
+        await this.prisma.order.delete({
+            where: { orderId },
+        })
+
+        return true
+    }
+
+
+
 }
 

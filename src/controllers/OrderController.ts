@@ -41,6 +41,8 @@ export class OrderController {
         }
     }
 
+
+
     async findById(request: Request, response: Response): Promise<Response> {
         try {
             const { orderId } = request.params
@@ -63,6 +65,20 @@ export class OrderController {
         }
     }
 
+    async findAll(request: Request, response: Response): Promise<Response> {
+        try {
+            const result = await this.orderService.findAll()
+
+            return response.status(HttpStatus.OK).json(
+                new SuccessResponse(result.data, 'Lista de pedidos', HttpStatus.OK)
+            )
+        } catch (error) {
+            console.error('Erro ao listar pedidos:', error)
+            return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+                new ErrorResponse('Internal Server Error', 'Erro ao listar pedidos', HttpStatus.INTERNAL_SERVER_ERROR)
+            )
+        }
+    }
 
     async update(request: Request, response: Response): Promise<Response> {
         try {
@@ -88,6 +104,29 @@ export class OrderController {
             console.error('Erro ao atualizar pedido:', error)
             return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
                 new ErrorResponse('Internal Server Error', 'Erro ao atualizar pedido', HttpStatus.INTERNAL_SERVER_ERROR)
+            )
+        }
+    }
+
+
+    async delete(request: Request, response: Response): Promise<Response> {
+        try {
+            const { orderId } = request.params
+            const result = await this.orderService.delete(orderId as string)
+
+            if (!result.success) {
+                return response.status(HttpStatus.NOT_FOUND).json(
+                    new ErrorResponse('Not Found', result.error || 'Pedido não encontrado', HttpStatus.NOT_FOUND)
+                )
+            }
+
+            return response.status(HttpStatus.OK).json(
+                new SuccessResponse({ deleted: true }, 'Pedido deletado com sucesso', HttpStatus.OK)
+            )
+        } catch (error) {
+            console.error('Erro ao deletar pedido:', error)
+            return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+                new ErrorResponse('Internal Server Error', 'Erro ao deletar pedido', HttpStatus.INTERNAL_SERVER_ERROR)
             )
         }
     }
