@@ -15,6 +15,6 @@ export interface IOrderRepository {
     findAll(): Promise<OrderResponse[]>
     update(orderId: string, input: CreateOrderInput): Promise<OrderResponse | null>
     delete(orderId: string): Promise<boolean>
-
+    exists(orderId: string): Promise<boolean>
 
 }

@@ -31,7 +31,7 @@ Content-Type: {{contentType}}
 Accept: {{accept}}
 
 {
-  "numeroPedido": "PED-2024-002",
+  "numeroPedido": "PED-2024-003",
   "valorTotal": 150.00,
   "dataCriacao": "2024-01-15T10:30:00Z",
   "items": [
@@ -48,7 +48,8 @@ Accept: {{accept}}
   ]
 }
 
-SEÇÃO 3: CONSULTA DE PEDIDOS
+# ==============================================================================
+# SEÇÃO 3: CONSULTA DE PEDIDOS
 # ==============================================================================
 ###
 

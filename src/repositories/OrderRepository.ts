@@ -139,6 +139,13 @@ export class OrderRepository implements IOrderRepository {
         return true
     }
 
+    async exists(orderId: string): Promise<boolean> {
+        const order = await this.prisma.order.findUnique({
+            where: { orderId },
+            select: { orderId: true },
+        })
+        return order !== null
+    }
 
 
 }
