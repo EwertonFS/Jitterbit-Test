@@ -1,0 +1,27 @@
+### Teste - Listar todas as rotas disponíveis
+GET http://localhost:3000/
+
+
+### Teste - Criar Pedido
+POST http://localhost:3000/api/order
+Content-Type: application/json
+
+{
+  "numeroPedido": "PED-2024-001",
+  "valorTotal": 150.00,
+  "dataCriacao": "2024-01-15T10:30:00Z",
+  "items": [
+    {
+      "idItem": "1",
+      "quantidadeItem": 2,
+      "valorItem": 50.00
+    },
+    {
+      "idItem": "2",
+      "quantidadeItem": 1,
+      "valorItem": 50.00
+    }
+  ]
+}
+
+
