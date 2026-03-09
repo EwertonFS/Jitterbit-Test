@@ -202,3 +202,142 @@ Accept: {{accept}}
 {
     "numeroPedido": "TEST"
 }
+
+# ==============================================================================
+# SEÇÃO 7: FLUXO COMPLETO DE TESTE
+# ==============================================================================
+
+# Este é um fluxo de teste completo que pode ser executado em sequência
+# O fluxo demonstra o ciclo completo de um pedido: CRIAR -> CONSULTAR -> ATUALIZAR -> CONSULTAR -> DELETAR -> VERIFICAR DELEÇÃO
+
+# INSTRUÇÕES DE USO:
+# 1. Execute a requisição "createOrder_Flow" abaixo e copie o orderId retornado na resposta
+# 2. Atualize a variável @orderId com o valor retornado (use um novo número de pedido único)
+# 3. Execute as outras requisições em ordem, conforme indicado nos comentários de cada uma
+# 4. Observe os resultados de cada etapa para verificar que o fluxo funciona corretamente
+
+# ==============================================================================
+# ETAPA 1: CRIAR PEDIDO
+# ==============================================================================
+# @name createOrder_Flow
+# @description Etapa 1 do fluxo - Cria um novo pedido
+# @response Success: Retorna o pedido criado com status 201
+# @next Use o "numeroPedido" retornado para atualizar a variável @orderId
+POST {{baseUrl}}/api/order
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+  "numeroPedido": "PED-FLOW-001",
+  "valorTotal": 500.00,
+  "dataCriacao": "2026-03-09T10:00:00Z",
+  "items": [
+    {
+      "idItem": "1",
+      "quantidadeItem": 5,
+      "valorItem": 100.00
+    }
+  ]
+}
+
+# ==============================================================================
+# ETAPA 2: CONSULTAR PEDIDO CRIADO
+# ==============================================================================
+# @name getOrder_Flow
+# @description Etapa 2 do fluxo - Consulta o pedido criado na etapa anterior
+# @response Success: Retorna os dados do pedido com status 200
+# @previous Execute createOrder_Flow primeiro e atualize @orderId
+GET {{baseUrl}}/api/order/PED-FLOW-001
+Accept: {{accept}}
+
+###
+
+# ==============================================================================
+# ETAPA 3: ATUALIZAR PEDIDO
+# ==============================================================================
+# @name updateOrder_Flow
+# @description Etapa 3 do fluxo - Atualiza o pedido criado anteriormente
+# @response Success: Retorna o pedido atualizado com status 200
+# @previous Execute getOrder_Flow para confirmar que o pedido existe
+PUT {{baseUrl}}/api/order/PED-FLOW-001
+Content-Type: {{contentType}}
+Accept: {{accept}}
+
+{
+    "numeroPedido": "PED-FLOW-001-UPDATED",
+    "valorTotal": 750.00,
+    "dataCriacao": "2026-03-09T12:00:00Z",
+    "items": [
+        {
+            "idItem": "1",
+            "quantidadeItem": 5,
+            "valorItem": 100.00
+        },
+        {
+            "idItem": "2",
+            "quantidadeItem": 5,
+            "valorItem": 50.00
+        }
+    ]
+}
+
+###
+
+# ==============================================================================
+# ETAPA 4: CONSULTAR PEDIDO ATUALIZADO
+# ==============================================================================
+# @name getOrderUpdated_Flow
+# @description Etapa 4 do fluxo - Verifica se a atualização foi aplicada corretamente
+# @response Success: Retorna o pedido com os novos valores (valorTotal: 750.00)
+# @previous Execute updateOrder_Flow para atualizar o pedido
+GET {{baseUrl}}/api/order/PED-FLOW-001
+Accept: {{accept}}
+
+###
+
+# ==============================================================================
+# ETAPA 5: DELETAR PEDIDO
+# ==============================================================================
+# @name deleteOrder_Flow
+# @description Etapa 5 do fluxo - Deleta o pedido criado para o teste
+# @response Success: Retorna status 204 (No Content) ou 200 com mensagem de sucesso
+# @previous Execute getOrderUpdated_Flow para confirmar os dados atualizados
+DELETE {{baseUrl}}/api/order/PED-FLOW-001
+Accept: {{accept}}
+
+###
+
+# ==============================================================================
+# ETAPA 6: VERIFICAR QUE PEDIDO FOI DELETADO
+# ==============================================================================
+# @name verifyDelete_Flow
+# @description Etapa 6 do fluxo - Confirma que o pedido foi realmente deletado
+# @response Success: Retorna status 404 (Not Found) confirmando que o pedido não existe mais
+# @previous Execute deleteOrder_Flow para deletar o pedido
+GET {{baseUrl}}/api/order/PED-FLOW-001
+Accept: {{accept}}
+
+# ==============================================================================
+# RESUMO DO FLUXO COMPLETO
+# ==============================================================================
+# 
+# ORDEM DE EXECUÇÃO:
+# 1. createOrder_Flow     -> CRIA um novo pedido
+# 2. getOrder_Flow       -> CONSULTA o pedido criado
+# 3. updateOrder_Flow    -> ATUALIZA os dados do pedido
+# 4. getOrderUpdated_Flow -> CONSULTA o pedido atualizado para confirmar mudanças
+# 5. deleteOrder_Flow    -> DELETA o pedido
+# 6. verifyDelete_Flow  -> VERIFICA que o pedido foi deletado (espera 404)
+#
+# RESULTADOS ESPERADOS:
+# - Etapa 1: Status 201 - Pedido criado com sucesso
+# - Etapa 2: Status 200 - Pedido encontrado com os dados originais
+# - Etapa 3: Status 200 - Pedido atualizado com sucesso
+# - Etapa 4: Status 200 - Pedido reflete os novos valores (valorTotal: 750.00)
+# - Etapa 5: Status 204 ou 200 - Pedido deletado com sucesso
+# - Etapa 6: Status 404 - Pedido não encontrado (confirmação de exclusão)
+#
+# NOTAS:
+# - Cada requisição depende da execução anterior
+# - Use números de pedido únicos para evitar conflitos com testes anteriores
+# - A variável @orderId pode ser atualizada manualmente entre as execuções
