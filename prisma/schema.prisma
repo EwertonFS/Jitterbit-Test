@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/database"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Order {
+  orderId      String   @id @map("order_id")
+  value        Decimal  @db.Decimal(10, 2)
+  creationDate DateTime @map("creation_date") @db.Timestamp()
+  items        Item[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
+
+model Item {
+  id        Int     @id @default(autoincrement())
+  orderId   String  @map("order_id")
+  productId Int     @map("product_id")
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+
+  order Order @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@map("items")
+}
