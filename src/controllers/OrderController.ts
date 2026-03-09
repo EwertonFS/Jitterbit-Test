@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 import { IOrderService } from '../interfaces/IOrderService'
-import { SuccessResponse } from '../types/OrderTypes'
+import { SuccessResponse, ErrorResponse } from '../types/OrderTypes'
 
 const HttpStatus = {
     CREATED: 201,
+    OK: 200,
+    NOT_FOUND: 404,
     BAD_REQUEST: 400,
     INTERNAL_SERVER_ERROR: 500,
 } as const
@@ -36,6 +38,28 @@ export class OrderController {
                 message: 'Erro ao criar pedido',
                 statusCode: HttpStatus.INTERNAL_SERVER_ERROR
             })
+        }
+    }
+
+    async findById(request: Request, response: Response): Promise<Response> {
+        try {
+            const { orderId } = request.params
+            const result = await this.orderService.findById(orderId as string)
+
+            if (!result.success) {
+                return response.status(HttpStatus.NOT_FOUND).json(
+                    new ErrorResponse('Not Found', result.error || 'Pedido não encontrado', HttpStatus.NOT_FOUND)
+                )
+            }
+
+            return response.status(HttpStatus.OK).json(
+                new SuccessResponse(result.data!, 'Pedido encontrado', HttpStatus.OK)
+            )
+        } catch (error) {
+            console.error('Erro ao buscar pedido:', error)
+            return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+                new ErrorResponse('Internal Server Error', 'Erro ao buscar pedido', HttpStatus.INTERNAL_SERVER_ERROR)
+            )
         }
     }
 }

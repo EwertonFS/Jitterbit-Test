@@ -19,4 +19,14 @@ export class OrderService implements IOrderService {
         const createdOrder = await this.orderRepository.create(order)
         return { success: true, data: createdOrder }
     }
+
+    async findById(orderId: string): Promise<{ success: boolean; data?: OrderResponse; error?: string }> {
+        const order = await this.orderRepository.findById(orderId)
+
+        if (!order) {
+            return { success: false, error: 'Pedido não encontrado' }
+        }
+
+        return { success: true, data: order }
+    }
 }

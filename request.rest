@@ -1,13 +1,37 @@
+# Este arquivo contém requisições HTTP para testar a API de Pedidos
+# Use a extensão "REST Client" do VS Code para executar estas requisições
+# ==============================================================================
+
+# ==============================================================================
+# CONFIGURAÇÕES GLOBAIS
+# ==============================================================================
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@orderId =PED-2024-001
+
+# ==============================================================================
+# CABEÇALHOS PADRÃO
+# ==============================================================================
+# Estes headers serão usados em todas as requisições
+@accept = application/json
+@cache-control = no-cache
+
+
+
+
 ### Teste - Listar todas as rotas disponíveis
-GET http://localhost:3000/
+GET {{baseUrl}}/
+Accept: {{accept}}
+Cache-Control: {{cache-control}}
 
 
 ### Teste - Criar Pedido
-POST http://localhost:3000/api/order
-Content-Type: application/json
+POST {{baseUrl}}/api/order
+Content-Type: {{contentType}}
+Accept: {{accept}}
 
 {
-  "numeroPedido": "PED-2024-001",
+  "numeroPedido": "PED-2024-002",
   "valorTotal": 150.00,
   "dataCriacao": "2024-01-15T10:30:00Z",
   "items": [
@@ -24,4 +48,11 @@ Content-Type: application/json
   ]
 }
 
+### 
+
+# @name getOrderById
+# @description Busca um pedido específico pelo ID
+# @param orderId - ID do pedido a ser buscado
+GET {{baseUrl}}/api/order/{{orderId}}
+Accept: {{accept}}
 

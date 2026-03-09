@@ -38,5 +38,29 @@ export class OrderRepository implements IOrderRepository {
             })),
         }
     }
+
+    async findById(orderId: string): Promise<OrderResponse | null> {
+        const order = await this.prisma.order.findUnique({
+            where: { orderId },
+            include: {
+                items: true,
+            },
+        })
+
+        if (!order) {
+            return null
+        }
+
+        return {
+            orderId: order.orderId,
+            value: Number(order.value),
+            creationDate: order.creationDate.toISOString(),
+            items: order.items.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: Number(item.price),
+            })),
+        }
+    }
 }
 

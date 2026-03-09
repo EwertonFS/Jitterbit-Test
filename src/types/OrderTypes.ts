@@ -11,10 +11,16 @@ export interface ItemResponse {
     price: number;
 }
 
-export interface ErrorResponse {
+export class ErrorResponse {
     error: string;
     message: string;
     statusCode: number;
+
+    constructor(error: string, message: string, statusCode: number) {
+        this.error = error;
+        this.message = message;
+        this.statusCode = statusCode;
+    }
 }
 
 export class SuccessResponse<T> {
@@ -29,8 +35,6 @@ export class SuccessResponse<T> {
     }
 }
 
-
-
 export interface CreateOrderInput {
     numeroPedido: string
     valorTotal: number
@@ -42,18 +46,4 @@ export interface ItemInput {
     idItem: string
     quantidadeItem: number
     valorItem: number
-}
-
-export interface OrderResponse {
-    orderId: string
-    value: number
-    creationDate: string
-    items: ItemResponse[]
-}
-
-// Interface de item na resposta da API
-export interface ItemResponse {
-    productId: number
-    quantity: number
-    price: number
 }

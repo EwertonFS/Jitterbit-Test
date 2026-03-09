@@ -9,4 +9,5 @@
  */
 export interface IOrderController {
     create(request: any, response: any): Promise<any>
+    findById(request: any, response: any): Promise<any>
 }
